@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Accueil - Coworking{% endblock %}
+
+{% block content %}
+<div class="bg-white p-4 rounded shadow-sm">
+    <h1 class="mb-4">Bienvenue sur la plateforme de Coworking</h1>
+    <p>Réservez votre salle facilement, gérez vos créneaux de manière efficace.</p>
+    <p>Consultez nos salles, choisissez une date et un créneau, puis réservez en quelques clics.</p>
+    <a href="{{ url_for('rooms_page') }}" class="btn btn-primary mt-3">Voir les salles</a>
+</div>
+{% endblock %}

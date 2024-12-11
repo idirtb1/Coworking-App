@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Tableau de bord - Admin{% endblock %}
+
+{% block content %}
+<div class="bg-white p-4 rounded shadow-sm">
+    <h1 class="mb-4">Tableau de bord</h1>
+
+    <h2 class="h4 mb-3">Liste des réservations</h2>
+    {% if reservations %}
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Salle</th>
+                <th>Utilisateur</th>
+                <th>Créneau</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reservation in reservations %}
+        {% set room = rooms|selectattr("id","equalto",reservation.room_id)|list|first %}
+        <tr>
+            <td>{{ reservation.id }}</td>
+            <td>{{ room.name }}</td>
+            <td>{{ reservation.user_name }}</td>
+            <td>{{ reservation.timeslot }}</td>
+            <td>{{ reservation.date }}</td>
+            <td>
+                <form action="{{ url_for('delete_reservation', res_id=reservation.id) }}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                </form>
+                <a href="{{ url_for('edit_reservation', res_id=reservation.id) }}" class="btn btn-secondary btn-sm">Modifier</a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Aucune réservation pour le moment.</p>
+    {% endif %}
+</div>
+{% endblock %}

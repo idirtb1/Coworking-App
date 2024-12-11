@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}{{ room.name }} - Coworking{% endblock %}
+
+{% block content %}
+<div class="bg-white p-4 rounded shadow-sm">
+    <h1 class="mb-4">{{ room.name }}</h1>
+    <p><strong>Capacité :</strong> {{ room.capacity }} personnes</p>
+    <p><strong>Description :</strong> {{ room.description }}</p>
+    <p class="text-muted mt-3">Pour réserver cette salle, rendez-vous sur la page de réservation.</p>
+    <a href="{{ url_for('book_room') }}" class="btn btn-primary">Réserver une salle</a>
+</div>
+{% endblock %}

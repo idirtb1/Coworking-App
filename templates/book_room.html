@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Réserver une salle{% endblock %}
+
+{% block content %}
+<div class="bg-white p-4 rounded shadow-sm" style="max-width:600px; margin:0 auto;">
+    <h1 class="mb-4">Réserver une salle</h1>
+    <form method="post" class="booking-form">
+        <div class="mb-3">
+            <label for="room_id" class="form-label">Salle</label>
+            <select name="room_id" id="room_id" class="form-select" required>
+                <option value="">-- Choisissez une salle --</option>
+                {% for room in rooms %}
+                <option value="{{ room.id }}">{{ room.name }} ({{ room.capacity }} personnes)</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="date" class="form-label">Date</label>
+            <input type="date" name="date" id="date" class="form-control" required>
+            <small class="text-muted">Les réservations sont impossibles le week-end.</small>
+        </div>
+
+        <div class="mb-3">
+            <label for="timeslot" class="form-label">Créneau Horaire</label>
+            <select name="timeslot" id="timeslot" class="form-select" required>
+                <option value="">Veuillez sélectionner une salle et une date</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="user_name" class="form-label">Votre nom</label>
+            <input type="text" name="user_name" id="user_name" required class="form-control"/>
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Adresse e-mail</label>
+            <input type="email" name="email" id="email" required class="form-control"/>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Réserver</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const roomSelect = document.getElementById('room_id');
+    const dateInput = document.getElementById('date');
+    const timeslotSelect = document.getElementById('timeslot');
+
+    function updateTimeslots() {
+        const roomId = roomSelect.value;
+        const dateVal = dateInput.value;
+        if(roomId && dateVal) {
+            fetch(`/available_timeslots?room_id=${roomId}&date=${dateVal}`)
+                .then(response => response.json())
+                .then(data => {
+                    timeslotSelect.innerHTML = '';
+                    if (data.length === 0) {
+                        let opt = document.createElement('option');
+                        opt.value = '';
+                        opt.textContent = 'Aucun créneau disponible';
+                        timeslotSelect.appendChild(opt);
+                    } else {
+                        let opt = document.createElement('option');
+                        opt.value = '';
+                        opt.textContent = '-- Choisissez un créneau --';
+                        timeslotSelect.appendChild(opt);
+                        data.forEach(slot => {
+                            let opt = document.createElement('option');
+                            opt.value = slot;
+                            opt.textContent = slot;
+                            timeslotSelect.appendChild(opt);
+                        });
+                    }
+                })
+                .catch(err => console.error(err));
+        } else {
+            timeslotSelect.innerHTML = '<option value="">Veuillez sélectionner une salle et une date</option>';
+        }
+    }
+
+    roomSelect.addEventListener('change', updateTimeslots);
+    dateInput.addEventListener('change', updateTimeslots);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Modifier Réservation{% endblock %}
+
+{% block content %}
+<div class="bg-white p-4 rounded shadow-sm" style="max-width:600px; margin:0 auto;">
+    <h1 class="mb-4">Modifier la réservation #{{ reservation.id }}</h1>
+    <form method="post">
+        <div class="mb-3">
+            <label for="room_id" class="form-label">Salle</label>
+            <select name="room_id" id="room_id" class="form-select" required>
+                {% for r in rooms %}
+                <option value="{{ r.id }}" {% if r.id == reservation.room_id %}selected{% endif %}>{{ r.name }} ({{ r.capacity }} personnes)</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="date" class="form-label">Date</label>
+            <input type="date" name="date" id="date" class="form-control" required value="{{ reservation.date }}">
+            <small class="text-muted">Pas de réservation le week-end.</small>
+        </div>
+
+        <div class="mb-3">
+            <label for="timeslot" class="form-label">Créneau Horaire</label>
+            <input type="text" name="timeslot" id="timeslot" class="form-control" required value="{{ reservation.timeslot }}">
+            <small class="text-muted">Entrez un créneau valide. Conseillé : {{ ', '.join(timeslots) }}</small>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Enregistrer</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Page non trouvée{% endblock %}
+
+{% block content %}
+<div class="bg-white p-4 rounded shadow-sm text-center">
+    <h1 class="mb-4">404 - Page non trouvée</h1>
+    <p>Désolé, la page que vous cherchez n'existe pas.</p>
+    <a href="{{ url_for('home') }}" class="btn btn-primary mt-3">Retour à l'accueil</a>
+</div>
+{% endblock %}
